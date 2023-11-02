@@ -11,10 +11,7 @@ public class Mavenproject1 {
 
     /*
     TODO: 
-         -Isolar passos da execução de Extrato Financeiro
-         -Adicionar exceção para caso a operação desejada não seja encontrada
-         -Adicionar funcionalidades
-         -Isolar passos da execução para suas respectivas funções 
+          
      */
     public static void main(String[] args) throws Exception {
         WebDriver driver = new EdgeDriver();
@@ -23,8 +20,8 @@ public class Mavenproject1 {
         driver.getWindowHandle();
 
         //Adicione seus dados nas variáveis antes de iniciar o programa!
-        String login = "125111349444@ulife.com.br";
-        String password = "290801";
+        String login = "";
+        String password = "";
         String campus = "Paulista";
         String desiredOperation = "Extrato Financeiro";
 
@@ -43,15 +40,8 @@ public class Mavenproject1 {
 
         loginButton.click();
 
-        try{
         WebElement menuOptionSelector = driver.findElement(By.className("uOrgSelected"));
         menuOptionSelector.click();
-        
-        } catch (Exception ex){
-            System.out.println("Login incorreto! Por favor, verifique seus dados.");
-            driver.quit();
-            System.exit(0);
-        }
 
         List<WebElement> buttonList = driver.findElements(By.className("ng-binding"));
         try {
@@ -64,7 +54,6 @@ public class Mavenproject1 {
         } catch (Exception ex) {
             System.out.println("Informações de Campus não encontradas!");
             driver.quit();
-            System.exit(0);
         }
 
         List<WebElement> optionList = driver.findElements(By.className("nw"));
@@ -91,9 +80,8 @@ public class Mavenproject1 {
 
             driver.quit();
         } catch (Exception ex) {
-            System.out.println("Botão de gerar boletos inexistente! Você deve estar com as contas em dia.");
+            System.out.println("Botão de gerar boletos inexistente! Você deve estar com as contas em dia!");
             driver.quit();
-            System.exit(0);
         }
     }
 }
