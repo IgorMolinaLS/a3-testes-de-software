@@ -11,7 +11,9 @@ public class Mavenproject1 {
 
     /*
     TODO: 
-          
+        -Isolar funcionalidade de gerar boleto a partir da escolha da operação desejada
+        -Criar array com funcionalidades tratadas
+        -Criar e isolar novas funcionalidades
      */
     public static void main(String[] args) throws Exception {
         WebDriver driver = new EdgeDriver();
@@ -20,8 +22,8 @@ public class Mavenproject1 {
         driver.getWindowHandle();
 
         //Adicione seus dados nas variáveis antes de iniciar o programa!
-        String login = "";
-        String password = "";
+        String login = "seuRaAqui@ulife.com.br";
+        String password = "suaSenhaAqui";
         String campus = "Paulista";
         String desiredOperation = "Extrato Financeiro";
 
@@ -40,8 +42,14 @@ public class Mavenproject1 {
 
         loginButton.click();
 
-        WebElement menuOptionSelector = driver.findElement(By.className("uOrgSelected"));
-        menuOptionSelector.click();
+        try {
+            WebElement menuOptionSelector = driver.findElement(By.className("uOrgSelected"));
+            menuOptionSelector.click();
+        } catch (Exception ex) {
+            System.out.println("Login inválido! Por favor cheque seus dados.");
+            driver.quit();
+            System.exit(0);
+        }
 
         List<WebElement> buttonList = driver.findElements(By.className("ng-binding"));
         try {
@@ -54,6 +62,7 @@ public class Mavenproject1 {
         } catch (Exception ex) {
             System.out.println("Informações de Campus não encontradas!");
             driver.quit();
+            System.exit(0);
         }
 
         List<WebElement> optionList = driver.findElements(By.className("nw"));
@@ -63,8 +72,15 @@ public class Mavenproject1 {
                 optionList.get(i).click();
                 break;
             }
+            if (i == optionList.size() - 1) {
+                if (optionList.get(i).getText() != desiredOperation) {
+                    System.out.println("Opção desejada não encontrada! Por favor cheque se ela está disponível");
+                    driver.quit();
+                    System.exit(0);
+                }
+            }
         }
-        
+
         ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
         int segundos = 1000;
@@ -79,9 +95,11 @@ public class Mavenproject1 {
             System.out.println(generateTicket.getText());
 
             driver.quit();
+            System.exit(0);
         } catch (Exception ex) {
             System.out.println("Botão de gerar boletos inexistente! Você deve estar com as contas em dia!");
             driver.quit();
+            System.exit(0);
         }
     }
 }
