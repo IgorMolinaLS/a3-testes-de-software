@@ -7,6 +7,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.edge.EdgeDriver;
 
+//clip
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
+
+import org.openqa.selenium.JavascriptExecutor;
+
 public class Mavenproject1 {
 
     /*
@@ -92,10 +101,24 @@ public class Mavenproject1 {
             selectTicketButton.click();
 
             WebElement generateTicket = driver.findElement(By.id("gerar_codigo_barra"));
-            System.out.println(generateTicket.getText());
+            if (generateTicket.isEnabled()) {
+                generateTicket.click();
+            }
+            
+            WebElement copyToClipboard = driver.findElement(By.id("input-183"));
+            Actions act = new Actions(driver);
+            act.click(copyToClipboard).perform();
+            copyToClipboard.sendKeys(Keys.CONTROL + "a");
+            copyToClipboard.sendKeys(Keys.CONTROL + "c");
+
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
+            Clipboard clipboard = toolkit.getSystemClipboard();
+            String barCodeText = (String) clipboard.getData(DataFlavor.stringFlavor);
+            System.out.println("O código de barras do seu boleto é: " + barCodeText);
 
             driver.quit();
             System.exit(0);
+            
         } catch (Exception ex) {
             System.out.println("Botão de gerar boletos inexistente! Você deve estar com as contas em dia!");
             driver.quit();
