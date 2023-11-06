@@ -14,10 +14,7 @@ import java.awt.datatransfer.DataFlavor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
-import org.openqa.selenium.JavascriptExecutor;
-
 public class Mavenproject1 {
-
     /*
     TODO: 
         -Isolar funcionalidade de gerar boleto a partir da escolha da operação desejada
