@@ -13,7 +13,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.interactions.Actions;
 
 /**
@@ -30,30 +29,7 @@ public class UlifeUser {
     public String operation;
 
     public UlifeUser() {
-        this.login = "12522224744@ulife.com.br";
-        this.password = "050504";
-        this.campusName = "Paulista";
-        this.driver = new EdgeDriver();
         this.url = "https://www.ulife.com.br/login.aspx";
-        this.operation = "Minha Carreira";
-    }
-
-    public UlifeUser(String login, String password, String campusName, WebDriver driver, String operation) {
-        this.login = login;
-        this.password = password;
-        this.campusName = campusName;
-        this.driver = driver;
-        this.url = "https://www.ulife.com.br/login.aspx";
-        this.operation = operation;
-    }
-
-    public UlifeUser(WebDriver driver, String operation) {
-        this.login = "12522224744@ulife.com.br";
-        this.password = "050504";
-        this.campusName = "Paulista";
-        this.driver = driver;
-        this.url = "https://www.ulife.com.br/login.aspx";
-        this.operation = operation;
     }
 
     public void enterLoginPage() {
@@ -125,13 +101,12 @@ public class UlifeUser {
                 if (optionList.get(i).getText() != this.operation) {
                     System.out.println("Opção desejada não encontrada! Por favor cheque se ela está disponível");
                     this.endDriver();
-
                 }
             }
         }
     }
 
-    public void getBarCode() {
+    public String getBarCode() {
         ArrayList<String> tabs = new ArrayList<String>(this.driver.getWindowHandles());
         this.driver.switchTo().window(tabs.get(1));
         int segundos = 1000;
@@ -143,11 +118,15 @@ public class UlifeUser {
             selectTicketButton.click();
 
             WebElement generateTicket = this.driver.findElement(By.id("gerar_codigo_barra"));
+            System.out.println(generateTicket);
             if (generateTicket.isEnabled()) {
                 generateTicket.click();
             }
+            
+            List<WebElement> inputsList = this.driver.findElements(By.xpath("//input[@type='text']"));
+            
 
-            WebElement copyToClipboard = this.driver.findElement(By.id("input-183"));
+            WebElement copyToClipboard = inputsList.get(inputsList.size() - 1);
             Actions act = new Actions(this.driver);
             act.click(copyToClipboard).perform();
             copyToClipboard.sendKeys(Keys.CONTROL + "a");
@@ -157,13 +136,11 @@ public class UlifeUser {
             Clipboard clipboard = toolkit.getSystemClipboard();
             String barCodeText = (String) clipboard.getData(DataFlavor.stringFlavor);
             System.out.println("O código de barras do seu boleto é: " + barCodeText);
-
-            this.endDriver();
-
+            return barCodeText;
+            
         } catch (Exception ex) {
             System.out.println("Botão de gerar boletos inexistente! Você deve estar com as contas em dia!");
-            this.endDriver();
-
+            return null;
         }
     }
 
@@ -210,7 +187,6 @@ public class UlifeUser {
 
             }
         }
-        
         System.out.println("Mês inexistente");
         return monthElement.getText();
     }
@@ -259,4 +235,11 @@ public class UlifeUser {
         this.campusName = campusName;
     }
 
+    public WebDriver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(WebDriver driver) {
+        this.driver = driver;
+    }
 }

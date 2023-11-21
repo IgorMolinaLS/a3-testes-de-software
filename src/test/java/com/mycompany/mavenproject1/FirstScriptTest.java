@@ -1,20 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/JUnit5TestClass.java to edit this template
- */
 package com.mycompany.mavenproject1;
 
 import org.junit.jupiter.api.AfterEach;
-
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.List;
 import org.openqa.selenium.By;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import org.openqa.selenium.edge.EdgeDriver;
 
 /**
@@ -25,7 +17,11 @@ public class FirstScriptTest {
 
     WebDriver driver;
     UlifeUser user;
-    String operation = "Calendário";
+    String login = "12522165805@ulife.com.brs";
+    String pass = "Rere81018101#s";
+    String campus = "Paulistas";
+    String operation = "Extrato Financeiros";
+
 
     @AfterEach
     public void tearDown() {
@@ -35,7 +31,12 @@ public class FirstScriptTest {
     @Test
     public void isLogin() {
         driver = new EdgeDriver();
-        UlifeUser user = new UlifeUser(driver, operation);
+        UlifeUser user = new UlifeUser();
+        user.setDriver(driver);
+        user.setLogin(login);
+        user.setPassword(pass);
+        user.setCampusName(campus);
+        user.setOperation(operation);
         user.enterLoginPage();
         assertTrue(user.getLoginButton().isEnabled());
     }
@@ -43,7 +44,12 @@ public class FirstScriptTest {
     @Test
     public void isLoggedIn() {
         driver = new EdgeDriver();
-        UlifeUser user = new UlifeUser(driver, operation);
+        UlifeUser user = new UlifeUser();
+        user.setDriver(driver);
+        user.setLogin(login);
+        user.setPassword(pass);
+        user.setCampusName(campus);
+        user.setOperation(operation);
         user.enterLoginPage();
         user.doLogin();
         assertFalse(user.getButtonList().isEmpty());
@@ -52,7 +58,12 @@ public class FirstScriptTest {
     @Test
     public void desiredOperationExists() {
         driver = new EdgeDriver();
-        UlifeUser user = new UlifeUser(driver, operation);
+        UlifeUser user = new UlifeUser();
+        user.setDriver(driver);
+        user.setLogin(login);
+        user.setPassword(pass);
+        user.setCampusName(campus);
+        user.setOperation(operation);
         Boolean operationExists = false;
 
         user.enterLoginPage();
@@ -68,23 +79,45 @@ public class FirstScriptTest {
         }
         assertEquals(true, operationExists);
     }
-    
+
+    //Video aula
     @Test
-    public void dateExists() throws InterruptedException{
+    public void dateExists() throws InterruptedException {
         driver = new EdgeDriver();
-        UlifeUser user = new UlifeUser(driver, operation);
+        UlifeUser user = new UlifeUser();
+        user.setDriver(driver);
+        user.setLogin(login);
+        user.setPassword(pass);
+        user.setCampusName(campus);
+        user.setOperation("Calendário");
 
         user.enterLoginPage();
         user.doLogin();
         user.selectCampus();
-        user.selectOperation(); 
+        user.selectOperation();
         Thread.sleep(1000);
         String day = "3";
-        String month = "Junho";
+        String month = "Novembro";
         String date = user.getVideo(day, month);
         assertEquals(day + " " + month.toUpperCase(), date);
-       
     }
-    
 
+    //Extrato Financeiro
+    @Test
+    public void barCodeExists() {
+        driver = new EdgeDriver();
+        UlifeUser user = new UlifeUser();
+        user.setDriver(driver);
+        user.setLogin(login);
+        user.setPassword(pass);
+        user.setCampusName(campus);
+        user.setOperation(operation);
+
+        user.enterLoginPage();
+        user.doLogin();
+        user.selectCampus();
+        user.selectOperation();
+        String barCode = user.getBarCode();
+        assertTrue(barCode != null);
+    }
 }
