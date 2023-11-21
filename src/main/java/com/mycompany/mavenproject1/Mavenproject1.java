@@ -15,9 +15,12 @@ public class Mavenproject1 {
         user.enterLoginPage();
         user.doLogin();
         user.selectCampus();
-        user.setOperation("PlayList");
+        user.setOperation("Calendário");
         
-        user.selectOperation();
-        user.getBarCode(); 
+        user.selectOperation(); 
+        Thread.sleep(1000);
+        String a = user.getVideo("3", "Novembro");
+        System.out.println(a);
+        
    }
 }

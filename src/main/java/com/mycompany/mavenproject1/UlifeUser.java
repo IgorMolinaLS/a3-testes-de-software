@@ -44,18 +44,17 @@ public class UlifeUser {
         this.campusName = campusName;
         this.driver = driver;
         this.url = "https://www.ulife.com.br/login.aspx";
-        this.operation = "Minha Carreira";
+        this.operation = operation;
     }
-    
+
     public UlifeUser(WebDriver driver, String operation) {
         this.login = "12522224744@ulife.com.br";
         this.password = "050504";
         this.campusName = "Paulista";
         this.driver = driver;
         this.url = "https://www.ulife.com.br/login.aspx";
-        this.operation = "Minha Carreira";
+        this.operation = operation;
     }
-
 
     public void enterLoginPage() {
         this.driver.get(this.url);
@@ -71,8 +70,7 @@ public class UlifeUser {
 
         if (this.login == "" || this.password == "") {
             System.out.println("Por favor, adicione login e senha no programa!");
-            driver.quit();
-            System.exit(0);
+            endDriver();
         }
 
         loginText.sendKeys(this.login);
@@ -86,8 +84,7 @@ public class UlifeUser {
             menuOptionSelector.click();
         } catch (Exception ex) {
             System.out.println("Login inválido! Por favor cheque seus dados.");
-            driver.quit();
-            System.exit(0);
+            endDriver();
         }
     }
 
@@ -103,8 +100,7 @@ public class UlifeUser {
             }
         } catch (Exception ex) {
             System.out.println("Informações de Campus não encontradas!");
-            driver.quit();
-            System.exit(0);
+            endDriver();
         }
     }
 
@@ -120,7 +116,7 @@ public class UlifeUser {
         List<WebElement> optionList = this.driver.findElements(By.className("nw"));
 
         for (int i = 0; i < optionList.size(); i++) {
-            
+
             if (optionList.get(i).getText().contains(this.operation)) {
                 optionList.get(i).click();
                 break;
@@ -128,14 +124,14 @@ public class UlifeUser {
             if (i == optionList.size() - 1) {
                 if (optionList.get(i).getText() != this.operation) {
                     System.out.println("Opção desejada não encontrada! Por favor cheque se ela está disponível");
-                    this.driver.quit();
-                    System.exit(0);
+                    this.endDriver();
+
                 }
             }
         }
     }
-    
-    public void getBarCode(){
+
+    public void getBarCode() {
         ArrayList<String> tabs = new ArrayList<String>(this.driver.getWindowHandles());
         this.driver.switchTo().window(tabs.get(1));
         int segundos = 1000;
@@ -162,14 +158,73 @@ public class UlifeUser {
             String barCodeText = (String) clipboard.getData(DataFlavor.stringFlavor);
             System.out.println("O código de barras do seu boleto é: " + barCodeText);
 
-            this.driver.quit();
-            System.exit(0);
+            this.endDriver();
 
         } catch (Exception ex) {
             System.out.println("Botão de gerar boletos inexistente! Você deve estar com as contas em dia!");
-            this.driver.quit();
-            System.exit(0);
+            this.endDriver();
+
         }
+    }
+
+    public WebElement getMonth(String month) {
+        List<WebElement> monthList = this.driver.findElements(By.xpath("//div[@class = 'ltTop ltTitleSmall']"));
+
+        for (int i = 0; i < monthList.size(); i++) {
+            if (monthList.get(i).getText().contains(month.toUpperCase())) {
+
+                WebElement Button = monthList.get(i).findElement(By.className("ng-hide"));
+
+                if (Button.getAttribute("class").contains("img iconCollapseAll ng-hide")) {
+                    monthList.get(i).click();
+                }
+                return monthList.get(i);
+            }
+            if (i == monthList.size() - 1) {
+                if (!monthList.get(i).getText().equals(month)) {
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
+    public String getVideo(String date, String month) {
+        WebElement monthElement = getMonth(month);
+
+        if (monthElement != null) {
+
+            WebElement monthParent = monthElement.findElement(By.xpath("parent::*"));
+            List<WebElement> dayList = monthParent.findElements(By.xpath(".//strong[@class = 'black fBold fb ng-binding']"));
+
+            for (int i = 0; i < dayList.size(); i++) {
+                if (dayList.get(i).getText().equals(date)) {
+                    WebElement dayParent = dayList.get(i).findElement(By.xpath("parent::*"));
+                    WebElement dayDiv = dayParent.findElement(By.xpath("parent::*"));
+                    WebElement videoLink = dayDiv.findElement(By.xpath(".//div[@class = 'fRight argt lhn pm']"));
+                    videoLink.click();
+                    String[] monthArray = monthElement.getText().split(" ");
+                    return dayList.get(i).getText() + " " + monthArray[0];
+
+                }
+
+            }
+        }
+        
+        System.out.println("Mês inexistente");
+        return monthElement.getText();
+    }
+
+    public void endDriver(WebDriver driver) {
+        driver.close();
+        driver.quit();
+        System.exit(0);
+    }
+
+    public void endDriver() {
+        this.driver.close();
+        this.driver.quit();
+        System.exit(0);
     }
 
     public String getOperation() {
@@ -179,7 +234,29 @@ public class UlifeUser {
     public void setOperation(String operation) {
         this.operation = operation;
     }
-    
-    
-    
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getCampusName() {
+        return campusName;
+    }
+
+    public void setCampusName(String campusName) {
+        this.campusName = campusName;
+    }
+
 }
