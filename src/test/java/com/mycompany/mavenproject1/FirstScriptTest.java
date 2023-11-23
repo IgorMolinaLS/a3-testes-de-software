@@ -29,7 +29,7 @@ public class FirstScriptTest {
     }
 
     @Test
-    public void isLogin() {
+    public void isLoginPage() {
         driver = new EdgeDriver();
         UlifeUser user = new UlifeUser();
         user.setDriver(driver);

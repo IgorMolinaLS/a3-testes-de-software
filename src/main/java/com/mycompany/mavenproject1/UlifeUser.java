@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.mavenproject1;
 
 import java.awt.Toolkit;
@@ -15,10 +11,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-/**
- *
- * @author 12522224744
- */
 public class UlifeUser {
 
     private String login;
@@ -38,9 +30,12 @@ public class UlifeUser {
         this.driver.getWindowHandle();
     }
 
-    public void doLogin() {
+    public WebElement getLoginButton() {
+        return this.driver.findElement(By.id("ctl00_b_imbLogin"));
+    }
 
-        WebElement loginText = this.driver.findElement(By.id("txtLogin"));;
+    public void doLogin() {
+        WebElement loginText = this.driver.findElement(By.id("txtLogin"));
         WebElement passwordText = this.driver.findElement(By.id("txtPassword"));
         WebElement loginButton = getLoginButton();
 
@@ -50,9 +45,7 @@ public class UlifeUser {
         }
 
         loginText.sendKeys(this.login);
-
         passwordText.sendKeys(this.password);
-
         loginButton.click();
 
         try {
@@ -62,6 +55,10 @@ public class UlifeUser {
             System.out.println("Login inválido! Por favor cheque seus dados.");
             endDriver();
         }
+    }
+
+    public List<WebElement> getButtonList() {
+        return this.driver.findElements(By.className("ng-binding"));
     }
 
     public void selectCampus() {
@@ -80,19 +77,10 @@ public class UlifeUser {
         }
     }
 
-    public List<WebElement> getButtonList() {
-        return this.driver.findElements(By.className("ng-binding"));
-    }
-
-    public WebElement getLoginButton() {
-        return this.driver.findElement(By.id("ctl00_b_imbLogin"));
-    }
-
     public void selectOperation() {
         List<WebElement> optionList = this.driver.findElements(By.className("nw"));
 
         for (int i = 0; i < optionList.size(); i++) {
-
             if (optionList.get(i).getText().contains(this.operation)) {
                 optionList.get(i).click();
                 break;
@@ -118,13 +106,12 @@ public class UlifeUser {
             selectTicketButton.click();
 
             WebElement generateTicket = this.driver.findElement(By.id("gerar_codigo_barra"));
-            System.out.println(generateTicket);
+
             if (generateTicket.isEnabled()) {
                 generateTicket.click();
             }
-            
+
             List<WebElement> inputsList = this.driver.findElements(By.xpath("//input[@type='text']"));
-            
 
             WebElement copyToClipboard = inputsList.get(inputsList.size() - 1);
             Actions act = new Actions(this.driver);
@@ -137,7 +124,7 @@ public class UlifeUser {
             String barCodeText = (String) clipboard.getData(DataFlavor.stringFlavor);
             System.out.println("O código de barras do seu boleto é: " + barCodeText);
             return barCodeText;
-            
+
         } catch (Exception ex) {
             System.out.println("Botão de gerar boletos inexistente! Você deve estar com as contas em dia!");
             return null;
@@ -149,7 +136,6 @@ public class UlifeUser {
 
         for (int i = 0; i < monthList.size(); i++) {
             if (monthList.get(i).getText().contains(month.toUpperCase())) {
-
                 WebElement Button = monthList.get(i).findElement(By.className("ng-hide"));
 
                 if (Button.getAttribute("class").contains("img iconCollapseAll ng-hide")) {
@@ -170,7 +156,7 @@ public class UlifeUser {
         WebElement monthElement = getMonth(month);
 
         if (monthElement != null) {
-
+            
             WebElement monthParent = monthElement.findElement(By.xpath("parent::*"));
             List<WebElement> dayList = monthParent.findElements(By.xpath(".//strong[@class = 'black fBold fb ng-binding']"));
 
@@ -182,9 +168,7 @@ public class UlifeUser {
                     videoLink.click();
                     String[] monthArray = monthElement.getText().split(" ");
                     return dayList.get(i).getText() + " " + monthArray[0];
-
                 }
-
             }
         }
         System.out.println("Mês inexistente");

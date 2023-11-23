@@ -1,19 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.mavenproject1;
 
-import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.edge.EdgeDriver;
 
-/**
- *
- * @author 12522224744
- */
 public class UlifeLogin {
 
     private String login;
@@ -60,9 +51,7 @@ public class UlifeLogin {
         }
 
         loginText.sendKeys(this.login);
-
         passwordText.sendKeys(this.password);
-
         loginButton.click();
 
         try {
@@ -74,11 +63,8 @@ public class UlifeLogin {
             System.exit(0);
         }
     }
-    
+ 
     public WebElement getLoginButton(){
         return this.driver.findElement(By.id("ctl00_b_imbLogin"));
-    }
-    
-    
-       
+    }    
 }
