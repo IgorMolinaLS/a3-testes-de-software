@@ -9,17 +9,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.edge.EdgeDriver;
 
+
 /**
  *
  * @author Igor Molina
  */
 public class FirstScriptTest {
 
-    WebDriver driver;
-    String login = "12522165805@ulife.com.brs";
-    String pass = "Rere81018101#s";
-    String campus = "Paulistas";
-    String operation = "Extrato Financeiros";
+    WebDriver driver = new EdgeDriver();
+    
+    String login = "12522224744@ulife.com.br";
+    String pass = "050504";
+    String campus = "Paulista";
+    String operation = "Extrato Financeiro";
 
 
     @AfterEach
@@ -29,34 +31,25 @@ public class FirstScriptTest {
 
     @Test
     public void isLoginPage() {
-        driver = new EdgeDriver();
         UlifeUser user = new UlifeUser();
         user.setDriver(driver);
-        user.setLogin(login);
-        user.setPassword(pass);
-        user.setCampusName(campus);
-        user.setOperation(operation);
         user.enterLoginPage();
         assertTrue(user.getLoginButton().isEnabled());
     }
 
     @Test
     public void isLoggedIn() {
-        driver = new EdgeDriver();
         UlifeUser user = new UlifeUser();
         user.setDriver(driver);
         user.setLogin(login);
         user.setPassword(pass);
-        user.setCampusName(campus);
-        user.setOperation(operation);
         user.enterLoginPage();
         user.doLogin();
         assertFalse(user.getButtonList().isEmpty());
     }
 
     @Test
-    public void desiredOperationExists() {
-        driver = new EdgeDriver();
+    public void desiredOperationExists() throws InterruptedException {
         UlifeUser user = new UlifeUser();
         user.setDriver(driver);
         user.setLogin(login);
@@ -82,7 +75,6 @@ public class FirstScriptTest {
     //Video aula
     @Test
     public void dateExists() throws InterruptedException {
-        driver = new EdgeDriver();
         UlifeUser user = new UlifeUser();
         user.setDriver(driver);
         user.setLogin(login);
@@ -104,13 +96,12 @@ public class FirstScriptTest {
     //Extrato Financeiro
     @Test
     public void barCodeExists() {
-        driver = new EdgeDriver();
         UlifeUser user = new UlifeUser();
         user.setDriver(driver);
-        user.setLogin(login);
-        user.setPassword(pass);
+        user.setLogin("12522165805@ulife.com.br");
+        user.setPassword("Rere81018101#");
         user.setCampusName(campus);
-        user.setOperation(operation);
+        user.setOperation("Extrato Financeiro");
 
         user.enterLoginPage();
         user.doLogin();
@@ -118,5 +109,59 @@ public class FirstScriptTest {
         user.selectOperation();
         String barCode = user.getBarCode();
         assertTrue(barCode != null);
+    }
+    
+    @Test
+    public void editPageExists(){
+        UlifeUser user = new UlifeUser();
+        user.setDriver(driver);
+        user.setLogin(login);
+        user.setPassword(pass);
+        user.setCampusName(campus);
+        user.setOperation("Atualizar celular");
+
+        user.enterLoginPage();
+        user.doLogin();
+        WebElement editButton = user.editProfile();
+        assertTrue(editButton != null);
+    }
+    
+    @Test
+    public void numberIsCorrect() throws InterruptedException{
+        UlifeUser user = new UlifeUser();
+        user.setDriver(driver);
+        user.setLogin(login);
+        user.setPassword(pass);
+        user.setCampusName(campus);
+        user.setOperation("Atualizar celular");
+
+        user.enterLoginPage();
+        user.doLogin();
+        user.editProfile();
+        String numberToCompare = user.updatePhoneNumber("55", "11994096827");
+        
+        Thread.sleep(1000);
+        List<WebElement> updatedNumbers = driver.findElements(By.xpath("//em[@class='ng-binding']"));
+        assertEquals(numberToCompare, updatedNumbers.get(updatedNumbers.size() - 1).getText());
+    }
+    
+    @Test
+    public void emailIsCorrect() throws InterruptedException{
+        UlifeUser user = new UlifeUser();
+        user.setDriver(driver);
+        user.setLogin(login);
+        user.setPassword(pass);
+        user.setCampusName(campus);
+        user.setOperation("Atualizar Email");
+
+        user.enterLoginPage();
+        user.doLogin();
+        user.editProfile();
+        String emailToCompare = user.updateEmail("thi-correia@uol.com.br");
+        
+        Thread.sleep(1000);
+        WebElement updatedEmail = driver.findElement(By.xpath("//em[@class='lhs ng-binding']"));
+
+        assertEquals(emailToCompare, updatedEmail.getText());
     }
 }

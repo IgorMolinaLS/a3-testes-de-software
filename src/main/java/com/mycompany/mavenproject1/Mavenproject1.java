@@ -12,8 +12,8 @@ public class Mavenproject1 {
         WebDriver driver = new EdgeDriver();
 
         user.setDriver(driver);
-        user.setLogin("12522192856@ulife.com.br");
-        user.setPassword("040101");
+        user.setLogin("12522224744@ulife.com.br");
+        user.setPassword("050504");
         user.setCampusName("Paulista");
         user.setOperation("Extrato Financeiro");
 
@@ -34,11 +34,11 @@ public class Mavenproject1 {
 
             case "Atualizar celular":
                 user.editProfile();
-                user.updatePhoneNumber("11970228098");
+                user.updatePhoneNumber("55","11994096827");
                 break;
             case "Atualizar Email":
                 user.editProfile();
-                user.updateEmail("igoramil452@gmail.com");
+                user.updateEmail("thi-correia@uol.com.br");
                 break;
         }
     }

@@ -95,7 +95,7 @@ public class UlifeUser {
         }
     }
     
-    public void editProfile() {
+    public WebElement editProfile() {
         WebElement userMenu = this.driver.findElement(By.id("topUserMenu"));
         userMenu.click();
         
@@ -112,9 +112,10 @@ public class UlifeUser {
         } 
         
         editButton.click();
+        return editButton;
     }
     
-    public void updatePhoneNumber(String newNumber) throws InterruptedException {
+    public String updatePhoneNumber(String DDD,String newNumber) throws InterruptedException {
         Thread.sleep(2 * segundos);
         WebElement saveButton = null;
         List<WebElement> fileButtonList = this.driver.findElements(By.className("listPipe"));
@@ -123,18 +124,24 @@ public class UlifeUser {
                 saveButton = fileButtonList.get(i);
             }   
         }
+        WebElement DDDInput = this.driver.findElement(By.xpath("//input[@maxlength='3']"));
+        
+        DDDInput.click();
+        DDDInput.sendKeys(Keys.CONTROL + "a");
+        DDDInput.sendKeys(DDD);
+        
         WebElement phoneInput = this.driver.findElement(By.xpath("//input[@maxlength='12']"));
-
+        
         phoneInput.click();
         phoneInput.sendKeys(Keys.CONTROL + "a");
         phoneInput.sendKeys(newNumber);
         
         saveButton.click();
-        System.out.println("Seu telefone foi atualizado para " + newNumber + "!");
-        endDriver();
+        System.out.println("Seu telefone foi atualizado para " + DDD + " " + newNumber + "!");
+        return newNumber;
     }
     
-    public void updateEmail(String newEmail) throws InterruptedException {
+    public String updateEmail(String newEmail) throws InterruptedException {
         Thread.sleep(2 * segundos);
         WebElement saveButton = null;
         List<WebElement> fileButtonList = this.driver.findElements(By.className("listPipe"));
@@ -153,7 +160,7 @@ public class UlifeUser {
         
         saveButton.click();
         System.out.println("Seu email foi atualizado para " + newEmail + "!");
-        endDriver();
+        return newEmail;
     }
 
     public String getBarCode() {
