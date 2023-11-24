@@ -16,7 +16,6 @@ import org.openqa.selenium.edge.EdgeDriver;
 public class FirstScriptTest {
 
     WebDriver driver;
-    UlifeUser user;
     String login = "12522165805@ulife.com.brs";
     String pass = "Rere81018101#s";
     String campus = "Paulistas";
@@ -98,7 +97,7 @@ public class FirstScriptTest {
         Thread.sleep(1000);
         String day = "3";
         String month = "Novembro";
-        String date = user.getVideo(day, month);
+        String date = user.getRecordedClass(day, month);
         assertEquals(day + " " + month.toUpperCase(), date);
     }
 

@@ -19,6 +19,7 @@ public class UlifeUser {
     private WebDriver driver;
     private String url;
     public String operation;
+    int segundos = 1000;
 
     public UlifeUser() {
         this.url = "https://www.ulife.com.br/login.aspx";
@@ -86,18 +87,78 @@ public class UlifeUser {
                 break;
             }
             if (i == optionList.size() - 1) {
-                if (optionList.get(i).getText() != this.operation) {
+                if (!optionList.get(i).getText().equals(this.operation)) {
                     System.out.println("Opção desejada não encontrada! Por favor cheque se ela está disponível");
                     this.endDriver();
                 }
             }
         }
     }
+    
+    public void editProfile() {
+        WebElement userMenu = this.driver.findElement(By.id("topUserMenu"));
+        userMenu.click();
+        
+        WebElement myData = this.driver.findElement(By.className("ptm"));
+        myData.click();
+        
+        WebElement editButton = null;
+        
+        List<WebElement> fileButtonList = this.driver.findElements(By.className("listPipe"));
+        for (int i = 0; i < fileButtonList.size(); i++) {
+            if(fileButtonList.get(i).getText().contains("Editar")){
+                editButton = fileButtonList.get(i);
+            }   
+        } 
+        
+        editButton.click();
+    }
+    
+    public void updatePhoneNumber(String newNumber) throws InterruptedException {
+        Thread.sleep(2 * segundos);
+        WebElement saveButton = null;
+        List<WebElement> fileButtonList = this.driver.findElements(By.className("listPipe"));
+        for (int i = 0; i < fileButtonList.size(); i++) {
+            if(fileButtonList.get(i).getText().contains("Salvar")){
+                saveButton = fileButtonList.get(i);
+            }   
+        }
+        WebElement phoneInput = this.driver.findElement(By.xpath("//input[@maxlength='12']"));
+
+        phoneInput.click();
+        phoneInput.sendKeys(Keys.CONTROL + "a");
+        phoneInput.sendKeys(newNumber);
+        
+        saveButton.click();
+        System.out.println("Seu telefone foi atualizado para " + newNumber + "!");
+        endDriver();
+    }
+    
+    public void updateEmail(String newEmail) throws InterruptedException {
+        Thread.sleep(2 * segundos);
+        WebElement saveButton = null;
+        List<WebElement> fileButtonList = this.driver.findElements(By.className("listPipe"));
+        for (int i = 0; i < fileButtonList.size(); i++) {
+            if(fileButtonList.get(i).getText().contains("Salvar")){
+                saveButton = fileButtonList.get(i);
+            }   
+        }
+        
+        WebElement emailBox = this.driver.findElement(By.id("ctl00_b_updEmail"));
+        WebElement emailInput = emailBox.findElement(By.cssSelector("input"));
+        emailInput.click();
+        
+        emailInput.sendKeys(Keys.CONTROL + "a");
+        emailInput.sendKeys(newEmail);
+        
+        saveButton.click();
+        System.out.println("Seu email foi atualizado para " + newEmail + "!");
+        endDriver();
+    }
 
     public String getBarCode() {
         ArrayList<String> tabs = new ArrayList<String>(this.driver.getWindowHandles());
         this.driver.switchTo().window(tabs.get(1));
-        int segundos = 1000;
 
         try {
             //Dependendo da potência da máquina, aumentar a quantidade de segundos
@@ -152,11 +213,12 @@ public class UlifeUser {
         return null;
     }
 
-    public String getVideo(String date, String month) {
+    public String getRecordedClass(String date, String month) throws InterruptedException {
+        Thread.sleep(1 * segundos);
         WebElement monthElement = getMonth(month);
-
+        
         if (monthElement != null) {
-            
+
             WebElement monthParent = monthElement.findElement(By.xpath("parent::*"));
             List<WebElement> dayList = monthParent.findElements(By.xpath(".//strong[@class = 'black fBold fb ng-binding']"));
 
@@ -166,6 +228,7 @@ public class UlifeUser {
                     WebElement dayDiv = dayParent.findElement(By.xpath("parent::*"));
                     WebElement videoLink = dayDiv.findElement(By.xpath(".//div[@class = 'fRight argt lhn pm']"));
                     videoLink.click();
+                    System.out.println("Tenha uma boa aula!");
                     String[] monthArray = monthElement.getText().split(" ");
                     return dayList.get(i).getText() + " " + monthArray[0];
                 }
@@ -174,15 +237,8 @@ public class UlifeUser {
         System.out.println("Mês inexistente");
         return monthElement.getText();
     }
-
-    public void endDriver(WebDriver driver) {
-        driver.close();
-        driver.quit();
-        System.exit(0);
-    }
-
+    
     public void endDriver() {
-        this.driver.close();
         this.driver.quit();
         System.exit(0);
     }
@@ -195,33 +251,18 @@ public class UlifeUser {
         this.operation = operation;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getCampusName() {
-        return campusName;
-    }
-
     public void setCampusName(String campusName) {
         this.campusName = campusName;
     }
 
-    public WebDriver getDriver() {
-        return driver;
-    }
 
     public void setDriver(WebDriver driver) {
         this.driver = driver;

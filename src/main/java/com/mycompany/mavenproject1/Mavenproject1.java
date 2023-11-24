@@ -12,29 +12,33 @@ public class Mavenproject1 {
         WebDriver driver = new EdgeDriver();
 
         user.setDriver(driver);
-        user.setLogin("12522165805@ulife.com.br");
-        user.setPassword("Rere81018101#");
+        user.setLogin("12522192856@ulife.com.br");
+        user.setPassword("040101");
         user.setCampusName("Paulista");
-        user.setOperation("Mensagem");
+        user.setOperation("Extrato Financeiro");
 
         user.enterLoginPage();
         user.doLogin();
         user.selectCampus();
-        user.selectOperation();
 
         switch (user.getOperation()) {
             case "Calendário":
-                Thread.sleep(1000);
-                String a = user.getVideo("3", "Novembro");
-                System.out.println(a);
+                user.selectOperation();
+                user.getRecordedClass("3", "Novembro");
                 break;
 
             case "Extrato Financeiro":
+                user.selectOperation();
                 user.getBarCode();
                 break;
 
-            case "Mensagem":
-                //user.sendMessage();
+            case "Atualizar celular":
+                user.editProfile();
+                user.updatePhoneNumber("11970228098");
+                break;
+            case "Atualizar Email":
+                user.editProfile();
+                user.updateEmail("igoramil452@gmail.com");
                 break;
         }
     }
