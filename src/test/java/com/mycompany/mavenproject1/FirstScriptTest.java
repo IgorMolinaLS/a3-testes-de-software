@@ -1,5 +1,6 @@
 package com.mycompany.mavenproject1;
 
+import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -91,6 +92,29 @@ public class FirstScriptTest {
         String month = "Novembro";
         String date = user.getRecordedClass(day, month);
         assertEquals(day + " " + month.toUpperCase(), date);
+    }
+    
+    @Test
+    public void videoURLExists() throws InterruptedException{
+        UlifeUser user = new UlifeUser();
+        user.setDriver(driver);
+        user.setLogin(login);
+        user.setPassword(pass);
+        user.setCampusName(campus);
+        user.setOperation("Calendário");
+        String day = "3";
+        String month = "Novembro";
+
+        user.enterLoginPage();
+        user.doLogin();
+        user.selectCampus();
+        user.selectOperation();
+        user.getRecordedClass(day, month);
+        
+        ArrayList<String> tabs = new ArrayList<>(this.driver.getWindowHandles());
+        this.driver.switchTo().window(tabs.get(1));
+        String URL = driver.getCurrentUrl();
+        assertTrue(URL != null);
     }
 
     //Extrato Financeiro
